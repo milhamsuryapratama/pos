@@ -7,5 +7,7 @@ Point of Sale App using React JS
 ## Available Scripts
 
 -> git clone https://github.com/milhamsuryapratama/pos.git
+
 -> npm install / yarn install
+
 -> npm start / yarn start
