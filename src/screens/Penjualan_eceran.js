@@ -4,7 +4,7 @@ import { Container, Form, Grid, Button, Table } from 'semantic-ui-react';
 import axios from 'axios';
 import convertRupiah from 'rupiah-format';
 
-class Penjualan_grosir extends Component {
+class Penjualan_eceran extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -70,7 +70,7 @@ class Penjualan_grosir extends Component {
                         nama: response[0].barang_nama,
                         satuan: response[0].barang_satuan,
                         stok: response[0].barang_stok,
-                        harga: response[0].barang_harjul_grosir,
+                        harga: response[0].barang_harjul,
                         harpok: response[0].barang_harpok
                     }
                 })
@@ -166,9 +166,9 @@ class Penjualan_grosir extends Component {
         return rupiah;
     }
 
-    simpanGrosir = async () => {
+    simpanEceran = async () => {
         const { cart, detail_bayar } = this.state;
-        let post = await axios.post('http://localhost:3001/admin/tambah-grosir', { cart: cart, detail_bayar: detail_bayar });
+        let post = await axios.post('http://localhost:3001/admin/tambah-eceran', { cart: cart, detail_bayar: detail_bayar });
         let resGrosir = await post.data;
         if (resGrosir) {
             alert('sukses');
@@ -324,7 +324,7 @@ class Penjualan_grosir extends Component {
                                 <Table.Footer>
                                     <Table.Row>
                                         <Table.HeaderCell colSpan='5' rowSpan='3'>
-                                            <Button color='blue' onClick={this.simpanGrosir}>Simpan</Button>
+                                            <Button color='blue' onClick={this.simpanEceran}>Simpan</Button>
                                         </Table.HeaderCell>
 
                                         <Table.HeaderCell>
@@ -385,4 +385,4 @@ class Penjualan_grosir extends Component {
     }
 }
 
-export default Penjualan_grosir;
+export default Penjualan_eceran;

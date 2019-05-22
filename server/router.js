@@ -179,4 +179,47 @@ router.post('/admin/tambah-grosir', async (req, res) => {
     });
 })
 
+router.post('/admin/tambah-eceran', async (req, res) => {
+    const data = req.body;
+    let nomorFaktur;
+    let getNofak = await req.con.query('SELECT max(jual_nofak) as nofak FROM tbl_jual', async (error, result) => {
+        nomorFaktur = result[0].nofak;
+
+        if (getNofak) {
+            let nf = parseInt(nomorFaktur) + 1;
+            let total = data.cart.reduce((prev, current) => {
+                return prev + current.subttl
+            }, 0);
+
+            let nm = await req.con.query(`INSERT INTO tbl_jual (jual_nofak,jual_total,jual_jml_uang,jual_kembalian,jual_user_id,jual_keterangan) VALUES('${nf}','${total}','${data.detail_bayar.bayar.replace('.', '')}','${data.detail_bayar.kembalian.replace('.', '')}','1','eceran')`, async (error, result) => {
+                if (nm) {
+                    if (error) {
+                        throw error;
+                    } else {
+                        let mapCart = await data.cart.map((d, index) => {
+                            req.con.query(`INSERT INTO tbl_detail_jual (d_jual_nofak,d_jual_barang_id,d_jual_barang_nama,d_jual_barang_satuan,d_jual_barang_harpok,d_jual_barang_harjul,d_jual_qty,d_jual_diskon,d_jual_total) VALUES('${nf}','${d.kode}','${d.nama}','${d.satuan}','${d.harpok}','${d.harga}','${d.jumlah}','0','${d.subttl}')`, async (error, result) => {
+                                if (mapCart) {
+                                    if (error) {
+                                        throw error;
+                                    } else {
+                                        let updateStok = await data.cart.map((d, index) => {
+                                            req.con.query(`UPDATE tbl_barang SET barang_stok = barang_stok - ${d.jumlah} WHERE barang_id = '${d.kode}'`, async (error) => {
+                                                if (error) {
+                                                    throw error;
+                                                } else {
+                                                    res.status(200).json({ data: 'data inserted successfully' });
+                                                }
+                                            })
+                                        })
+                                    }
+                                }
+                            })
+                        })
+                    }
+                }
+            })
+        }
+    });
+})
+
 module.exports = router;

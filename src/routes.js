@@ -47,5 +47,9 @@ export default [
     {
         path: '/admin/penjualan-grosir',
         screen: 'Penjualan_grosir'
+    },
+    {
+        path: '/admin/penjualan-eceran',
+        screen: 'Penjualan_eceran'
     }
 ];

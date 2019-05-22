@@ -45,6 +45,13 @@ class Header extends Component {
                             onClick={this.handleItemClick}
                         />
                     </Link>
+                    <Link to="/admin/penjualan-eceran">
+                        <Menu.Item
+                            name='Penjualan (Eceran)'
+                            active={activeItem === 'penjualan-eceran'}
+                            onClick={this.handleItemClick}
+                        />
+                    </Link>
                 </Menu>
             </Segment>
         )
