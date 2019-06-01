@@ -12,9 +12,28 @@ class TambahKategori extends Component {
         }
     }
 
+    componentDidMount() {
+        axios.get("http://localhost:3001/admin/checkExpiredToken", {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                localStorage.removeItem('token');
+                window.location.href = '/';
+            })
+    }
+
     simpanKategori = async () => {
         const { kategori } = this.state;
-        let post = await axios.post("http://localhost:3001/tambah-kategori", { kategori: kategori });
+        let post = await axios.post("http://localhost:3001/tambah-kategori", { kategori: kategori }, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
         let response = await post.data;
         this.props.history.push("/admin/kategori");
     }

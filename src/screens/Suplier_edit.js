@@ -19,7 +19,11 @@ class Suplier_edit extends Component {
     componentDidMount() {
         const { id } = this.props.match.params;
 
-        axios.get(`http://localhost:3001/admin/edit-suplier/${id}`)
+        axios.get(`http://localhost:3001/admin/edit-suplier/${id}`, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
             .then((response) => {
                 this.setState({
                     suplier: {
@@ -30,7 +34,8 @@ class Suplier_edit extends Component {
                 })
             })
             .catch((error) => {
-                alert(error);
+                localStorage.removeItem('token');
+                window.location.href = '/';
             })
     }
 
@@ -43,7 +48,11 @@ class Suplier_edit extends Component {
     updateDataSuplier = async () => {
         const { id } = this.props.match.params;
         const { suplier } = this.state;
-        let post = await axios.post(`http://localhost:3001/admin/update-suplier/${id}`, { suplier: suplier });
+        let post = await axios.post(`http://localhost:3001/admin/update-suplier/${id}`, { suplier: suplier }, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
         let response = post.data;
         if (response) {
             this.props.history.push("/admin/suplier");

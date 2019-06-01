@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const path = require('path');
 const cors = require('cors');
+const session = require('express-session');
 
 const router = require('../server/router');
 
@@ -23,6 +24,12 @@ app.use((req, res, next) => {
     req.con = con;
     next();
 });
+
+app.use(session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: true
+}))
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

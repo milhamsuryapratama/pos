@@ -26,7 +26,11 @@ class Barang_tambah extends Component {
 
     componentDidMount() {
         let arrObj = [];
-        axios.get("http://localhost:3001/kategori")
+        axios.get("http://localhost:3001/kategori", {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
             .then((response) => {
                 response.data.map((data, index) => {
                     arrObj.push({
@@ -37,7 +41,8 @@ class Barang_tambah extends Component {
                 this.setState({ kategori: arrObj })
             })
             .catch(error => {
-                console.log(error);
+                localStorage.removeItem('token');
+                window.location.href = '/';
             })
     }
 
@@ -77,13 +82,16 @@ class Barang_tambah extends Component {
 
     simpanDataBarang = async () => {
         const { barang } = this.state;
-        let post = await axios.post('http://localhost:3001/tambah-barang', { barang: barang });
+        let post = await axios.post('http://localhost:3001/tambah-barang', { barang: barang }, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
         let response = await post.data;
         this.props.history.push("/admin/barang");
     }
 
     render() {
-        console.log(this.state.barang.harpok)
         return (
             <Fragment>
                 <Header />

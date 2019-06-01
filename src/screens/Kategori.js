@@ -15,24 +15,34 @@ class Kategori extends Component {
     }
 
     componentDidMount() {
-        axios.get("http://localhost:3001/kategori")
+        axios.get("http://localhost:3001/kategori", {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
             .then(response => {
                 this.setState({ data_kategori: response.data })
             })
             .catch(error => {
-                console.log(error);
+                localStorage.removeItem('token');
+                window.location.href = '/';
             })
     }
 
     hapusKategori = (id, index) => {
         const { data_kategori } = this.state;
-        axios.get(`http://localhost:3001/hapus-kategori/${id}`)
+        axios.get(`http://localhost:3001/hapus-kategori/${id}`, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
             .then((response) => {
                 data_kategori.splice(index, 1);
                 this.setState({ data_kategori })
             })
             .catch((error) => {
-                console.log(error);
+                localStorage.removeItem('token');
+                window.location.href = '/';
             })
     }
 

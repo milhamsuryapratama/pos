@@ -16,6 +16,21 @@ class Suplier_tambah extends Component {
         }
     }
 
+    componentDidMount() {
+        axios.get("http://localhost:3001/admin/checkExpiredToken", {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                localStorage.removeItem('token');
+                window.location.href = '/';
+            })
+    }
+
     handleSuplierData = e => {
         const { suplier } = this.state;
         suplier[e.target.name] = e.target.value;
@@ -24,7 +39,11 @@ class Suplier_tambah extends Component {
 
     simpanDataSuplier = async () => {
         const { suplier } = this.state;
-        let post = await axios.post('http://localhost:3001/admin/tambah-suplier', { suplier: suplier });
+        let post = await axios.post('http://localhost:3001/admin/tambah-suplier', { suplier: suplier }, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
         let response = await post.data;
         if (response) {
             this.props.history.push("/admin/suplier");

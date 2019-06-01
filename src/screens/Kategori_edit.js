@@ -15,17 +15,26 @@ class Kategori_edit extends Component {
 
     componentDidMount() {
         const { id } = this.props.match.params;
-        axios.get(`http://localhost:3001/edit-kategori/${id}`)
+        axios.get(`http://localhost:3001/edit-kategori/${id}`, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
             .then((response) => {
                 this.setState({ new_kategori: response.data[0].kategori_nama })
             })
             .catch((error) => {
-                console.log(error);
+                localStorage.removeItem('token');
+                window.location.href = '/';
             })
     }
 
     updateKategori = async (id) => {
-        let update = await axios.post(`http://localhost:3001/update-kategori/${id}`, { kategori: this.state.new_kategori });
+        let update = await axios.post(`http://localhost:3001/update-kategori/${id}`, { kategori: this.state.new_kategori }, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
         let response = update.data;
         this.props.history.push("/admin/kategori");
     }

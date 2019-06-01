@@ -29,8 +29,16 @@ class Barang_edit extends Component {
         let arrObj = [];
 
         axios.all([
-            axios.get(`http://localhost:3001/kategori`),
-            axios.get(`http://localhost:3001/edit-barang/${id}`)
+            axios.get(`http://localhost:3001/kategori`, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            }),
+            axios.get(`http://localhost:3001/edit-barang/${id}`, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            })
         ])
             .then(axios.spread((kategoriResponse, byIdResponse) => {
                 kategoriResponse.data.map((data, index) => {
@@ -58,6 +66,10 @@ class Barang_edit extends Component {
                     }
                 })
             }))
+            .catch((error) => {
+                localStorage.removeItem('token');
+                window.location.href = '/';
+            })
     }
 
     handleBarangData = e => {
@@ -96,7 +108,11 @@ class Barang_edit extends Component {
 
     updateDataBarang = async (id) => {
         const { barang } = this.state;
-        let post = await axios.post(`http://localhost:3001/update-barang/${id}`, { barang: barang });
+        let post = await axios.post(`http://localhost:3001/update-barang/${id}`, { barang: barang }, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
         let response = await post.data;
         this.props.history.push("/admin/barang");
     }

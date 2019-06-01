@@ -53,24 +53,34 @@ class Suplier extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:3001/admin/suplier')
+        axios.get('http://localhost:3001/admin/suplier', {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
             .then((response) => {
                 this.setState({ suplier: response.data })
             })
             .catch((error) => {
-                alert(error)
+                localStorage.removeItem('token');
+                window.location.href = '/';
             })
     }
 
     hapusSuplier = (id, index) => {
         const { suplier } = this.state;
-        axios.get(`http://localhost:3001/admin/hapus-suplier/${id}`)
+        axios.get(`http://localhost:3001/admin/hapus-suplier/${id}`, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
             .then((response) => {
                 suplier.splice(index, 1);
                 this.setState({ suplier })
             })
             .catch((error) => {
-                alert(error);
+                localStorage.removeItem('token');
+                window.location.href = '/';
             })
     }
 

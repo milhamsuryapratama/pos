@@ -46,7 +46,11 @@ class Penjualan_grosir extends Component {
             })
         }
 
-        let post = await axios.get(`http://localhost:3001/edit-barang/${this.state.detail.kode}`);
+        let post = await axios.get(`http://localhost:3001/edit-barang/${this.state.detail.kode}`, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
         let response = await post.data;
         // console.log(response);
         if (response) {
@@ -168,7 +172,11 @@ class Penjualan_grosir extends Component {
 
     simpanGrosir = async () => {
         const { cart, detail_bayar } = this.state;
-        let post = await axios.post('http://localhost:3001/admin/tambah-grosir', { cart: cart, detail_bayar: detail_bayar });
+        let post = await axios.post('http://localhost:3001/admin/tambah-grosir', { cart: cart, detail_bayar: detail_bayar }, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
         let resGrosir = await post.data;
         if (resGrosir) {
             alert('sukses');

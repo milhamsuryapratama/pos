@@ -102,24 +102,34 @@ class Barang extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:3001/barang')
+        axios.get('http://localhost:3001/barang', {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
             .then((response) => {
                 this.setState({ barang: response.data })
             })
             .catch((error) => {
-                console.log(error)
+                localStorage.removeItem('token');
+                window.location.href = '/';
             })
     }
 
     hapusBarang = (index, id) => {
         const { barang } = this.state;
-        axios.get(`http://localhost:3001/hapus-barang/${id}`)
+        axios.get(`http://localhost:3001/hapus-barang/${id}`, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
             .then(() => {
                 barang.splice(index, 1);
                 this.setState({ barang })
             })
             .catch((error) => {
-                alert(error);
+                localStorage.removeItem('token');
+                window.location.href = '/';
             })
     }
 
